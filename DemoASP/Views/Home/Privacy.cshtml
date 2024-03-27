@@ -1,0 +1,19 @@
+﻿@{
+    List<string> maliste = new List<string>();
+    maliste.Add("Le caca des pigeon c'est caca");
+    maliste.Add("Bonne nuit");
+    maliste.Add("ET à l'année prochaine");
+    
+    ViewData["Title"] = "Privacy Policy";
+}
+<h1>@ViewData["Title"]</h1>
+
+<p>Bienviendu sur mon super site de guedin</p>
+
+<ul>
+    @foreach(string s in maliste)
+    {
+        <li>@s</li>
+    }
+    
+</ul>

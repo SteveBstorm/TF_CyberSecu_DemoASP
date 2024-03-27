@@ -1,0 +1,21 @@
+﻿@model Movie
+<form asp-action="Create" class="form">
+    <div class="form-control">
+        Titre : <input type="text" asp-for="Title" />
+    </div>
+    <div class="form-control">
+        Description : <input type="text" asp-for="Description"/>
+    </div>
+    <div class="form-control">
+        Réalisateur : <input type="text" asp-for="Realisator" />
+    </div>
+    <div>
+        <button type="submit" class="btn btn-sm btn-success">Valider</button>
+    </div>
+</form>
+
+@*  <div>Titre : <input type="number" /></div>
+    <div>Titre : <input type="date" /></div>
+    <div>Titre : <input type="color" /></div>
+    <div>Titre : <input type="file" /></div>
+    <div>Titre : <input type="password" /></div> *@
