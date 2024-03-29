@@ -37,8 +37,12 @@ namespace DemoASP.Controllers
         [HttpPost]
         public IActionResult Create(Movie movie)
         {
-            _movieService.Create(movie);
-            return RedirectToAction("Liste");
+            if (ModelState.IsValid)
+            {
+                _movieService.Create(movie);
+                return RedirectToAction("Liste");
+            }
+            return View(movie);
         }
 
         /*
@@ -47,9 +51,30 @@ namespace DemoASP.Controllers
             => La méthode de service Edit qui fait la mise à jour dans la liste
             => La vu qui présente le formulaire prérempli avec les données du film à éditer
          */
+
+        //Afficher le formulaire prérempli sur base d'un id
         public IActionResult Edit(int id)
         {
-            return View();
+            Movie aModifier = _movieService.GetById(id);
+            return View(aModifier);
+        }
+
+        //Action entreprise quand je clique sur Valider dans le formulaire
+        [HttpPost]
+        public IActionResult Edit(Movie movie)
+        {
+            if(ModelState.IsValid)
+            {
+                _movieService.Edit(movie);
+                return RedirectToAction("Liste");
+            }
+            return View(movie);
+        }
+
+        public IActionResult Delete(int id)
+        {
+            _movieService.Delete(id);
+            return RedirectToAction("Liste");
         }
     }
 }

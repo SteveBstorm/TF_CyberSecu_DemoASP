@@ -31,8 +31,20 @@ namespace DemoASP.Services
         
         public void Create(Movie movie) 
         {
-            movie.Id = maListe.Max(s => s.Id) + 1;
+            movie.Id = (maListe.Count() > 0) ? maListe.Max(s => s.Id) + 1 : 1;
             maListe.Add(movie);
+        }
+
+        public void Edit(Movie movie)
+        {
+            int index = maListe.FindIndex(f => f.Id == movie.Id);
+            maListe[index] = movie;
+        }
+
+        public void Delete(int id)
+        {
+            Movie aSupprimer = maListe.SingleOrDefault(f=> f.Id == id);
+            maListe.Remove(aSupprimer);
         }
     }
 }

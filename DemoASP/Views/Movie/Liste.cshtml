@@ -25,6 +25,18 @@
                     >
                         Détails
                     </a>
+                    <a class="btn btn-outline-dark"
+                       asp-controller="Movie"
+                       asp-action="Edit"
+                       asp-route-id="@m.Id">
+                        Modifier
+                    </a>
+                    <a class="btn btn-outline-dark"
+                       asp-controller="Movie"
+                       asp-action="Delete"
+                       asp-route-id="@m.Id">
+                        Supprimer
+                    </a>
                 </td>
             </tr>
 
