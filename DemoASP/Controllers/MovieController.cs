@@ -25,7 +25,7 @@ namespace DemoASP.Controllers
 
         public IActionResult Details(int id)
         {
-            Movie m = _movieService.maListe.Where(f => f.Id == id).SingleOrDefault();
+            Movie m = _movieService.GetById(id);
             return View(m);
         }
 
@@ -37,9 +37,19 @@ namespace DemoASP.Controllers
         [HttpPost]
         public IActionResult Create(Movie movie)
         {
-            movie.Id = _movieService.maListe.Max(s => s.Id) + 1;
-            _movieService.maListe.Add(movie);
+            _movieService.Create(movie);
             return RedirectToAction("Liste");
+        }
+
+        /*
+         Mettre en place le formulaire de mise à jour d'un film
+            => L'action en HttpPost pour enregistrer les modif quand on a cliqué sur Valider
+            => La méthode de service Edit qui fait la mise à jour dans la liste
+            => La vu qui présente le formulaire prérempli avec les données du film à éditer
+         */
+        public IActionResult Edit(int id)
+        {
+            return View();
         }
     }
 }

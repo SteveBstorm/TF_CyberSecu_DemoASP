@@ -23,5 +23,16 @@ namespace DemoASP.Services
                 Realisator = "George Lucas"
             });
         }
+
+        public Movie GetById(int id)
+        {
+            return maListe.Where(f => f.Id == id).SingleOrDefault();
+        }
+        
+        public void Create(Movie movie) 
+        {
+            movie.Id = maListe.Max(s => s.Id) + 1;
+            maListe.Add(movie);
+        }
     }
 }

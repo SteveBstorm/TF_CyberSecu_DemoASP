@@ -1,5 +1,8 @@
 ﻿@model List<Movie>
-
+@*
+    @model accueil le SEUL ET UNIQUE objet que la vue peut accepter
+    et J'y accède dans la vue grâce à Model
+*@
 <fieldset>
     <legend>Tout mes films</legend>
     <table class="table table-bordered table-striped tablegreen">
@@ -29,3 +32,11 @@
 
     </table>
 </fieldset>
+
+@{
+    string s = "toto";
+    if(s != null)
+    {
+        
+    }
+}
