@@ -20,7 +20,7 @@ namespace DemoASP.Controllers
         public IActionResult Liste()
         {
             
-            return View(_movieService.maListe);
+            return View(_movieService.GetAll());
         }
 
         public IActionResult Details(int id)
