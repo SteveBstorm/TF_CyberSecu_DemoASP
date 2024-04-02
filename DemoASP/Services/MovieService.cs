@@ -83,22 +83,85 @@ namespace DemoASP.Services
             return m;
         }
 
-        public void Create(Movie movie)
+        public bool Create(MovieCreateForm movie)
         {
-            movie.Id = (maListe.Count() > 0) ? maListe.Max(s => s.Id) + 1 : 1;
-            maListe.Add(movie);
+            using(SqlConnection connection = new SqlConnection(connectionString))
+            {
+                using(SqlCommand cmd =  new SqlCommand())
+                {
+                    cmd.Connection = connection;
+                    cmd.CommandText = "INSERT INTO Movie (Title, Description, Realisator) " +
+                        "VALUES (@title, @desc, @real)";
+
+                    cmd.Parameters.AddWithValue("title", movie.Title);
+                    cmd.Parameters.AddWithValue("desc", movie.Description);
+                    cmd.Parameters.AddWithValue("real", movie.Realisator);
+
+                    try
+                    {
+                        connection.Open();
+                        return cmd.ExecuteNonQuery() > 0;
+                    }
+                    catch (SqlException ex) 
+                    {
+                        //Gérer l'exception
+                        throw ex;
+                    }
+                    catch (Exception ex)
+                    {
+                        throw ex;
+                    }
+                    connection.Close();
+                }
+            }
+
+            //movie.Id = (maListe.Count() > 0) ? maListe.Max(s => s.Id) + 1 : 1;
+            //maListe.Add(movie);
         }
 
         public void Edit(Movie movie)
         {
-            int index = maListe.FindIndex(f => f.Id == movie.Id);
-            maListe[index] = movie;
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand())
+                {
+                    cmd.Connection = connection;
+                    cmd.CommandText = "UPDATE Movie SET Title = @title, Description = @desc, Realisator = @real " +
+                        "WHERE Id = @id";
+
+                    cmd.Parameters.AddWithValue("id", movie.Id);
+                    cmd.Parameters.AddWithValue("title", movie.Title);
+                    cmd.Parameters.AddWithValue("desc", movie.Description);
+                    cmd.Parameters.AddWithValue("real", movie.Realisator);
+
+                    connection.Open();
+                    cmd.ExecuteNonQuery();
+                    connection.Close();
+                }
+            }
+            //int index = maListe.FindIndex(f => f.Id == movie.Id);
+            //maListe[index] = movie;
         }
 
         public void Delete(int id)
         {
-            Movie aSupprimer = maListe.SingleOrDefault(f => f.Id == id);
-            maListe.Remove(aSupprimer);
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand())
+                {
+                    cmd.Connection = connection;
+                    cmd.CommandText = "DELETE FROM Movie WHERE Id = @id";
+
+                    cmd.Parameters.AddWithValue("id", id);
+                    
+
+                    connection.Open();
+                    cmd.ExecuteNonQuery();
+                    connection.Close();
+                }
+            }
+            //Movie aSupprimer = maListe.SingleOrDefault(f => f.Id == id);
+            //maListe.Remove(aSupprimer);
         }
     }
 }

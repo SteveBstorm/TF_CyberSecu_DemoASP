@@ -1,5 +1,6 @@
 ﻿using DemoASP.Models;
 using DemoASP.Services;
+using Humanizer;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DemoASP.Controllers
@@ -34,16 +35,34 @@ namespace DemoASP.Controllers
             return View();
         }
 
+        //Scénario de gestion des erreurs => Voir MovieService (Create)
+        //Voir Modif dans controller Home/Error et dans la vue Shared/Error
         [HttpPost]
-        public IActionResult Create(Movie movie)
+        public IActionResult Create(MovieCreateForm movie)
         {
             if (ModelState.IsValid)
             {
-                _movieService.Create(movie);
-                return RedirectToAction("Liste");
+                try {
+                    if (_movieService.Create(movie))
+                    {
+                        return RedirectToAction("Liste");
+                    }
+                    else
+                    {
+                        TempData["ErrorMessage"] = "Une erreur s'est produite lors de l'ajout";
+                        return View(movie);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return RedirectToAction("Error", "Home", routeValues :new { ex.Message });
+                }
             }
             return View(movie);
+          
         }
+
+        
 
         /*
          Mettre en place le formulaire de mise à jour d'un film
