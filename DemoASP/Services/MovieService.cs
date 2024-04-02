@@ -9,7 +9,7 @@ namespace DemoASP.Services
          Modifier le service pour qu'il fonctionne avec la DB plutot qu'avec une simple liste
          */
         private string connectionString = @"Data Source=DESKTOP-56GOFPS\DEVPERSO;Initial Catalog=TFCyberSecu_MovieDB;Integrated Security=True;Connect Timeout=60;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False";
-        public  List<Movie> maListe { get; set; }
+        public List<Movie> maListe { get; set; }
         public MovieService()
         {
             //maListe = new List<Movie>();
@@ -32,13 +32,13 @@ namespace DemoASP.Services
         public List<Movie> GetAll()
         {
             List<Movie> list = new List<Movie>();
-            using(SqlConnection connection = new SqlConnection(connectionString)) 
-            { 
-                using(SqlCommand command = connection.CreateCommand())
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                using (SqlCommand command = connection.CreateCommand())
                 {
                     command.CommandText = "SELECT * FROM Movie";
                     connection.Open();
-                    using(SqlDataReader reader = command.ExecuteReader()) 
+                    using (SqlDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
                         {
@@ -59,10 +59,31 @@ namespace DemoASP.Services
 
         public Movie GetById(int id)
         {
-            return maListe.Where(f => f.Id == id).SingleOrDefault();
+            Movie m = new Movie();
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                using (SqlCommand command = connection.CreateCommand())
+                {
+                    command.CommandText = "SELECT * FROM Movie WHERE Id = @id";
+                    command.Parameters.AddWithValue("id", id);
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            m.Id = (int)reader["Id"];
+                            m.Title = (string)reader["Title"];
+                            m.Description = (string)reader["Description"];
+                            m.Realisator = (string)reader["Realisator"];
+                        }
+                    }
+                    connection.Close();
+                }
+            }
+            return m;
         }
-        
-        public void Create(Movie movie) 
+
+        public void Create(Movie movie)
         {
             movie.Id = (maListe.Count() > 0) ? maListe.Max(s => s.Id) + 1 : 1;
             maListe.Add(movie);
@@ -76,7 +97,7 @@ namespace DemoASP.Services
 
         public void Delete(int id)
         {
-            Movie aSupprimer = maListe.SingleOrDefault(f=> f.Id == id);
+            Movie aSupprimer = maListe.SingleOrDefault(f => f.Id == id);
             maListe.Remove(aSupprimer);
         }
     }
